@@ -73,7 +73,7 @@ function test_guardar_zapato() {
       "sku": "SKU00002",
       "marca": "Rancho grande",
       "costo": 875.5,
-      "material": "piel",
+      "material": "PIEL",
       "numero": "28.5"
     });
     

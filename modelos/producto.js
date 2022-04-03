@@ -9,7 +9,7 @@ class producto  {
     }
 
     precioVenta() {
-    return this.costo + (this.costo * this.porcentajeUtilidad);    
+    return this.costo + (this.costo * (this.porcentajeUtilidad / 100));    
     }
 };
 

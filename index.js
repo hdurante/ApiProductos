@@ -26,7 +26,7 @@ async function obtenerProductos() {
     collection = database.collection("productos");    
     cursor =  collection.find({});//Para el ejercicio no le pongo un limite pero deberia paginarse
     await cursor.forEach(doc=> {
-      lista.push(doc);      
+      lista.push(doc);    
     });
     return lista;
     
