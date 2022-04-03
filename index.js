@@ -5,6 +5,11 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 
+const cors = require('cors');
+app.use(cors({
+  origin: '*'
+}));
+
 
 let userMongo='UsrGilaSoftware';
 let passwordMongo='qLSncVdg4CJfL57r';
@@ -55,6 +60,7 @@ app.get('/status', function (req, res) {
 });
 
 app.get('/obtenerProductos', async function (req, res) {
+  console.log('Se han solicitado los productos');
   lista = await obtenerProductos();
   res.status(200).send(lista);
   });
