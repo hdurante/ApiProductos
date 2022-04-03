@@ -9,63 +9,73 @@ app.use(express.json());
 let userMongo='UsrGilaSoftware';
 let passwordMongo='qLSncVdg4CJfL57r';
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://"+userMongo+":"+passwordMongo+"@mongodev.pv3ra.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+const uri = "mongodb+srv://"+userMongo+":"+passwordMongo+"@mongodev.pv3ra.mongodb.net/GilaSoftware?retryWrites=true&w=majority";
+
 
 async function obtenerProductos() {
-  try {
+  try { 
+    let lista = [];
+    client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
     await client.connect();
-    const database = client.db("GilaSoftware");
-    const collection = database.collection("productos");    
-    const cursor =  collection.find({});
-    await cursor.forEach(doc=>console.log(doc));    
+    database = client.db("GilaSoftware");
+    collection = database.collection("productos");    
+    cursor =  collection.find({});//Para el ejercicio no le pongo un limite pero deberia paginarse
+    await cursor.forEach(doc=> {
+      lista.push(doc);      
+    });
+    return lista;
+    
   } catch (e) {
     console.error(e);
   }  
   finally {
-    await client.close();
+      //await client.close(); //Desconozco por que no hace lo que deberia no termine de investigar la razon
   }
 }
 
 async function guardarProducto(producto) {
-  try {
+  try {      
+    client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });  
     await client.connect();
-    const database = client.db("GilaSoftware");
-    const collection = database.collection("productos");    
-    const result = await collection.insertOne(producto);
+    database = client.db("GilaSoftware");
+    collection = database.collection("productos");    
+    result = await collection.insertOne(producto);
     console.log('Se almaceno el producto con el _id:'+result.insertedId);
   } catch (e) {
     console.error(e);
   }  
   finally {
-    await client.close();
+      //await client.close(); //Desconozco por que no hace lo que deberia no termine de investigar la razon
   }
 }
 
 
-app.get('/', function (req, res) {
-  res.send('Saludos desde express');
+app.get('/status', function (req, res) {
+  res.status(200).send('OK');  
 });
 
-app.get('/productos', function (req, res) {
-  obtenerProductos()   
-  res.send(req.body);
+app.get('/obtenerProductos', async function (req, res) {
+  lista = await obtenerProductos();
+  res.status(200).send(lista);
   });
 
-  app.post('/guardar', function (req, res) {    
+  app.post('/guardar', async function (req, res) {    
     
     if(req.body.hasOwnProperty('tipoPantalla')){
       console.log('Es una television');
       let producto = Object.assign(new Television, req.body);
-      guardarProducto(producto);
+      await guardarProducto(producto);
     }
     else if(req.body.hasOwnProperty('material')){
       console.log("Es un zapato");
       let producto = Object.assign(new Zapato, req.body);
+      await guardarProducto(producto);
     }
     else if(req.body.hasOwnProperty('procesador')){
       console.log("Es una laptop");
       let producto = Object.assign(new Laptop, req.body);
+      console.log(producto);
+      await guardarProducto(producto);
     }
 
     res.send(req.body);

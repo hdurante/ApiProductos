@@ -14,6 +14,7 @@
   "author": "Hector Manuel Durante Nuñez",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.26.1",
     "express": "^4.17.3",
     "mongodb": "^4.4.1"
   }
