@@ -7,7 +7,7 @@ app.use(express.json());
 
 const cors = require('cors');
 app.use(cors({
-  origin: '*'
+  origin: '*' //TODO ADVERTENCIA se desactivo para que funcione en todos los dominios durante las pruebas
 }));
 
 
@@ -68,19 +68,18 @@ app.get('/obtenerProductos', async function (req, res) {
   app.post('/guardar', async function (req, res) {    
     
     if(req.body.hasOwnProperty('tipoPantalla')){
-      console.log('Es una television');
+      console.log('Se almaceno una televisión');
       let producto = Object.assign(new Television, req.body);
       await guardarProducto(producto);
     }
     else if(req.body.hasOwnProperty('material')){
-      console.log("Es un zapato");
+      console.log("Se almaceno un zapato");
       let producto = Object.assign(new Zapato, req.body);
       await guardarProducto(producto);
     }
     else if(req.body.hasOwnProperty('procesador')){
-      console.log("Es una laptop");
-      let producto = Object.assign(new Laptop, req.body);
-      console.log(producto);
+      console.log("Se almaceno una laptop");
+      let producto = Object.assign(new Laptop, req.body);      
       await guardarProducto(producto);
     }
 
